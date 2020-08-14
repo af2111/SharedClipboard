@@ -27,7 +27,7 @@ namespace mqtt
             String StartCmd = Console.ReadLine();
             if(StartCmd == "start")
             {
-                
+                Console.WriteLine("Zwischenablage Geteilt! Geben sie erneut \"start\" ein, um die Zwischenablage erneut zu teilen!");
                 PublishClipboard();
                 StartProgram();
             }
