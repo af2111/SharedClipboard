@@ -66,6 +66,12 @@ namespace mqtt
                 MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE,
                 false);
             }
+            else
+            {
+                Console.WriteLine("Falsches Kommando! Versuche es erneut");
+                client.Disconnect();
+                initClipboard();
+            }
            
             
             
