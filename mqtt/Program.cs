@@ -7,6 +7,7 @@ using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace mqtt
 {
@@ -46,25 +47,30 @@ namespace mqtt
             String text = Clipboard.GetText();
 
             // Connecten
-            MqttClient client = new MqttClient("localhost");
+            MqttClient client = new MqttClient("broker.mqttdashboard.com");
             byte code = client.Connect(Guid.NewGuid().ToString());
 
             Console.WriteLine("Geben sie \"get\" oder \"post\" ein");
             string GetPostCmd = Console.ReadLine();
+           
             if(GetPostCmd.ToLower() == "get")
             {
                 // Zum Topic Subscriben
                 client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-                ushort msgIdSub = client.Subscribe(new string[] { "zwischenablage/zwischenablage" },
+
+                ushort msgIdSub = client.Subscribe(new string[] { "zwischenablage/windows" },
                 new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+                Console.WriteLine("Sie können nun Clipboards geteilt bekommen. Drücken sie eine Taste, um Abzubrechen.");
+                Console.ReadKey();
             }
             else if(GetPostCmd.ToLower() == "post")
             {
                 // Clipboard publishen
-                ushort msgIdPub = client.Publish("zwischenablage/zwischenablage",
+                ushort msgIdPub = client.Publish("zwischenablage/windows",
                 Encoding.UTF8.GetBytes(text),
                 MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE,
                 false);
+
             }
             else
             {
@@ -78,13 +84,18 @@ namespace mqtt
             
 
         }
+        [STAThread]
         static void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
-            String msgReceived = Encoding.UTF8.GetString(e.Message);
-            Clipboard.SetText(msgReceived);
+            string msgReceived = Encoding.UTF8.GetString(e.Message);
+            Thread thread = new Thread(() => Clipboard.SetText(msgReceived));
+            thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
+            thread.Start();
+            thread.Join();
             Console.WriteLine(msgReceived);
+            
         }
-
+        
 
 
     }
