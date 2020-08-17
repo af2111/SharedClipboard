@@ -62,6 +62,9 @@ namespace mqtt
                 new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
                 Console.WriteLine("Sie können nun Clipboards geteilt bekommen. Drücken sie eine Taste, um Abzubrechen.");
                 Console.ReadKey();
+                Console.Clear();
+                client.Disconnect();
+                
             }
             else if(GetPostCmd.ToLower() == "post")
             {
@@ -70,7 +73,10 @@ namespace mqtt
                 Encoding.UTF8.GetBytes(text),
                 MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE,
                 false);
-
+                Console.WriteLine("Ihr Clipboard wurde erfolgreich gepostet. Das Programm wird neugestartet, wenn sie eine Taste drücken.");
+                Console.ReadKey();
+                Console.Clear();
+                client.Disconnect();
             }
             else
             {
@@ -92,7 +98,12 @@ namespace mqtt
             thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
             thread.Start();
             thread.Join();
-            Console.WriteLine(msgReceived);
+            thread.Abort();
+            Console.WriteLine("Der Text " + msgReceived + " wurde in ihre Zwischenablage kopiert! Drücken sie eine Taste um das Programm neuzustarten!");
+            Console.ReadKey();
+            Console.Clear();
+            StartProgram();
+            
             
         }
         
