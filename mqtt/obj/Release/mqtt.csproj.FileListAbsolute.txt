@@ -1,0 +1,10 @@
+C:\Users\mf\source\repos\mqtt\mqtt\bin\Release\mqtt.exe.config
+C:\Users\mf\source\repos\mqtt\mqtt\bin\Release\mqtt.exe
+C:\Users\mf\source\repos\mqtt\mqtt\bin\Release\mqtt.pdb
+C:\Users\mf\source\repos\mqtt\mqtt\bin\Release\M2Mqtt.Net.dll
+C:\Users\mf\source\repos\mqtt\mqtt\bin\Release\M2Mqtt.Net.pdb
+C:\Users\mf\source\repos\mqtt\mqtt\obj\Release\mqtt.csprojAssemblyReference.cache
+C:\Users\mf\source\repos\mqtt\mqtt\obj\Release\mqtt.csproj.CoreCompileInputs.cache
+C:\Users\mf\source\repos\mqtt\mqtt\obj\Release\mqtt.csproj.CopyComplete
+C:\Users\mf\source\repos\mqtt\mqtt\obj\Release\mqtt.exe
+C:\Users\mf\source\repos\mqtt\mqtt\obj\Release\mqtt.pdb
