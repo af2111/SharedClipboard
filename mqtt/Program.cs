@@ -13,38 +13,32 @@ namespace mqtt
 {
     class Program
     {
-        
+
         [STAThread]
         static void Main(string[] args)
         {
             StartProgram();
-            
+
 
         }
         [STAThread]
 
         static void StartProgram()
         {
-            Console.WriteLine("Geben sie start ein, um das Program zu Starten.");
-            String StartCmd = Console.ReadLine();
-            if (StartCmd.ToLower() == "start")
-            {
+            Console.WriteLine("Drücken Sie eine Taste um Ihre Zwischenablage zu Teilen oder um eine andere zu Empfangen");
+            Console.ReadKey();
+            Console.Clear();
+            
 
                 initClipboard();
                 StartProgram();
-            }
+            
 
-            else
-            {
-                Console.WriteLine("Falsches Kommando!");
-                StartProgram();
-                
-            }
         }
         [STAThread]
         static void initClipboard()
         {
-            
+
             // Clipboard bekommen
             String myClipboard = Clipboard.GetText();
 
@@ -54,8 +48,8 @@ namespace mqtt
 
             Console.WriteLine("Gib \"get\" oder \"post\" ein!");
             string GetPostCmd = Console.ReadLine();
-           
-            if(GetPostCmd.ToLower() == "get")
+
+            if (GetPostCmd.ToLower() == "get")
             {
                 Console.WriteLine("Gib das Passwort ein.");
                 string PasswordEingabe = Console.ReadLine();
@@ -68,13 +62,15 @@ namespace mqtt
                 Console.ReadKey();
                 Console.Clear();
                 client.Disconnect();
+                initClipboard();
             }
-            else if(GetPostCmd.ToLower() == "post")
+            else if (GetPostCmd.ToLower() == "post")
             {
                 Console.WriteLine("Wähle ein Passwort.");
                 string Password = Console.ReadLine();
                 Console.WriteLine("Das Passwort wurde gewählt. Drücke eine Taste um deine Zwischenablage zu posten.");
                 Console.ReadKey();
+                Console.Clear();
                 // Clipboard publishen
                 ushort msgIdPub = client.Publish("zwischenablage" + Password + "/windows",
                 Encoding.UTF8.GetBytes(myClipboard),
@@ -84,41 +80,38 @@ namespace mqtt
                 Console.ReadKey();
                 Console.Clear();
                 client.Disconnect();
+                initClipboard();
             }
             else
             {
                 Console.WriteLine("Falsches Kommando! Versuche es erneut");
                 client.Disconnect();
                 initClipboard();
-                
 
             }
-           
-            
-            
-            
+
+
+
+
 
         }
         [STAThread]
         static void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
-           
-                string msgReceived = Encoding.UTF8.GetString(e.Message);
-                Thread thread = new Thread(() => Clipboard.SetText(msgReceived));
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
-                thread.Join();
-                thread.Abort();
-                Console.WriteLine("Der Text " + msgReceived + " wurde in deine Zwischenablage kopiert! Drück eine Taste um das Programm neuzustarten!");
-                Console.ReadKey();
-                Console.Clear();
-                StartProgram();
-          
-           
-            
-            
+
+            string msgReceived = Encoding.UTF8.GetString(e.Message);
+            Thread thread = new Thread(() => Clipboard.SetText(msgReceived));
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+            thread.Abort();
+            Console.WriteLine("Der Text " + msgReceived + " wurde in deine Zwischenablage kopiert! Drück eine Taste um eine andere Aktion zu Wählen!");
+            Console.ReadKey();
+            Console.Clear();
+            initClipboard();
+
         }
-        
+
 
 
     }
